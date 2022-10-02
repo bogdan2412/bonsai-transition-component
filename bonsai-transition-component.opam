@@ -1,0 +1,17 @@
+opam-version: "2.0"
+name: "bonsai-transition-component"
+synopsis: "Bonsai component that facilitates CSS transitions, in the style of https://vuejs.org/guide/built-ins/transition.html#css-based-transitions"
+maintainer: "Bogdan Tataroiu <b.tataroiu@gmail.com>"
+authors: [ "Bogdan Tataroiu <b.tataroiu@gmail.com>" ]
+depends: [
+  "bonsai"
+  "bonsai-toggleable"
+  "core"
+  "virtual_dom"
+  "dune" {build}
+  "ppx_jane" {build}
+  "ocaml" {build}
+]
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
