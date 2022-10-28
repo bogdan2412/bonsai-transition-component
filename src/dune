@@ -3,4 +3,4 @@
  (public_name bonsai-transition-component)
  (libraries bonsai bonsai-toggleable core virtual_dom)
  (preprocess
-  (pps ppx_jane)))
+  (pps bonsai.ppx_bonsai ppx_jane)))
