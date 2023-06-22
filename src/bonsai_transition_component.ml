@@ -10,8 +10,6 @@ module Model = struct
     | Leave_from
     | Leave_active
   [@@deriving compare, sexp]
-
-  let equal = [%compare.equal: t]
 end
 
 module Action = struct
@@ -25,10 +23,11 @@ end
 let state_machine =
   let%sub.Bonsai state =
     Bonsai.state_machine0
-      (module Model)
-      (module Action)
+      ~sexp_of_model:[%sexp_of: Model.t]
+      ~sexp_of_action:[%sexp_of: Action.t]
+      ~equal:[%compare.equal: Model.t]
       ~default_model:Left
-      ~apply_action:(fun ~inject:_ ~schedule_event:_ model action ->
+      ~apply_action:(fun (_ : Action.t Bonsai.Apply_action_context.t) model action ->
         match action with
         | Toggle ->
           (match model with
@@ -47,6 +46,7 @@ let state_machine =
            | Enter_active -> Entered
            | Leave_from -> Leave_active
            | Leave_active -> Left))
+      ()
   in
   let%sub.Bonsai () =
     Bonsai.Edge.lifecycle'
