@@ -88,11 +88,10 @@ let wrap
     | Leave_active -> leave_to @ leave_transition
   in
   Vdom.Node.div
-    ~attr:
-      (Vdom.Attr.many
-         [ Vdom.Attr.classes classes
-         ; Vdom.Attr.on_transitionend (fun _ -> internal_advance_transition ())
-         ])
+    ~attrs:
+      [ Vdom.Attr.classes classes
+      ; Vdom.Attr.on_transitionend (fun _ -> internal_advance_transition ())
+      ]
     children
 ;;
 
