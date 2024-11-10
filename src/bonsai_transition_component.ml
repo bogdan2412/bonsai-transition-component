@@ -27,25 +27,27 @@ let state_machine =
       ~sexp_of_action:[%sexp_of: Action.t]
       ~equal:[%compare.equal: Model.t]
       ~default_model:Left
-      ~apply_action:(fun (_ : Action.t Bonsai.Apply_action_context.t) model action ->
-        match action with
-        | Toggle ->
-          (match model with
-           | Left | Leave_from | Leave_active -> Enter_from
-           | Entered | Enter_from | Enter_active -> Leave_from)
-        | Set_state desired_state ->
-          (match model, desired_state with
-           | (Left | Leave_from | Leave_active), Untoggled -> model
-           | (Entered | Enter_from | Enter_active), Toggled -> model
-           | (Entered | Enter_from | Enter_active), Untoggled -> Leave_from
-           | (Left | Leave_from | Leave_active), Toggled -> Enter_from)
-        | Internal_advance_transition ->
-          (match model with
-           | Left | Entered -> model
-           | Enter_from -> Enter_active
-           | Enter_active -> Entered
-           | Leave_from -> Leave_active
-           | Leave_active -> Left))
+      ~apply_action:
+        (fun
+          (_ : (Action.t, unit) Bonsai.Apply_action_context.t) model action ->
+          match action with
+          | Toggle ->
+            (match model with
+             | Left | Leave_from | Leave_active -> Enter_from
+             | Entered | Enter_from | Enter_active -> Leave_from)
+          | Set_state desired_state ->
+            (match model, desired_state with
+             | (Left | Leave_from | Leave_active), Untoggled -> model
+             | (Entered | Enter_from | Enter_active), Toggled -> model
+             | (Entered | Enter_from | Enter_active), Untoggled -> Leave_from
+             | (Left | Leave_from | Leave_active), Toggled -> Enter_from)
+          | Internal_advance_transition ->
+            (match model with
+             | Left | Entered -> model
+             | Enter_from -> Enter_active
+             | Enter_active -> Entered
+             | Leave_from -> Leave_active
+             | Leave_active -> Left))
       ()
   in
   let%sub.Bonsai () =
