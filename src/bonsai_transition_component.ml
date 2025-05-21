@@ -22,7 +22,7 @@ end
 
 let state_machine =
   let%sub.Bonsai state =
-    Bonsai.state_machine0
+    Bonsai.state_machine
       ~sexp_of_model:[%sexp_of: Model.t]
       ~sexp_of_action:[%sexp_of: Action.t]
       ~equal:[%compare.equal: Model.t]
